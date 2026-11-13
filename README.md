@@ -70,9 +70,6 @@
 
 ###
 
-<h4 data-importer="text" align="center">FEATURED PROJECTS</h4>
-
-###
 
 
 <div data-importer="image" align="center">
