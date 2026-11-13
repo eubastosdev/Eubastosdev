@@ -74,13 +74,6 @@
 
 ###
 
-<!-- TODO: troque os links abaixo pelos repositórios reais e ajuste as descrições -->
-
-- 🌐 **[Web para Todos](https://github.com/Eubastosdev/REPO-AQUI)**: website about digital accessibility, built as a university extension project.
-- 🎁 **[Amigo Oculto](https://github.com/Eubastosdev/REPO-AQUI)**: gift list manager app for a friends' secret Santa.
-- 🧩 **Project 3**: short description, stack used and link.
-
-###
 
 <div data-importer="image" align="center">
   <img data-importer="image" height="400" alt="Cat" src="https://imgs.search.brave.com/lt-EaWO9j90sQKui9WTgLwshXMkIvlrMI-vdbIlw7nA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5lYXN5LXBlYXN5/LmFpLzIyM2Y4OWNm/LTRjM2ItNDNkMS1i/NGI3LWE0Njg4Y2Fi/ODM2ZS85YjMxYTlh/ZC0yMzkxLTRlMzgt/YTdlMi0zNzkzZmRi/NThhNGZfdGh1bWIu/d2VicA" />
