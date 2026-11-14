@@ -8,7 +8,11 @@
 
 ###
 
-<h4 data-importer="text" align="left">🌎 Based in Belo Horizonte, Minas Gerais, Brazil<br>🎓 Systems Analysis and Development graduate, now pursuing a postgraduate degree in Software Engineering<br>🚀 Aspiring Full-Stack Developer, building for the web and beyond<br>🎯 Focused on React and Python, always exploring new tools<br>📈 Learning by building: sharpening my stack through personal and collaborative projects</h4>
+<h4 data-importer="text" align="left">
+🌎 Based in Belo Horizonte, Minas Gerais, Brazil<br>
+🎓 Systems Analysis and Development graduate, now pursuing a postgraduate degree in Software Engineering<br>
+🎯 Focused on React and Python, always exploring new tools<br>
+📈 Learning by building: sharpening my stack through personal and collaborative projects</h4>
 
 <details>
   <summary>🇧🇷 Leia em português</summary>
@@ -17,7 +21,6 @@
 
   🌎 Moro em Belo Horizonte, Minas Gerais, Brasil<br>
   🎓 Graduado em Análise e Desenvolvimento de Sistemas, cursando pós-graduação em Engenharia de Software<br>
-  🚀 Aspirante a desenvolvedor full-stack, criando para a web e além<br>
   🎯 Foco em React e Python, sempre explorando novas ferramentas<br>
   📈 Aprendo construindo: afiando minha stack em projetos pessoais e colaborativos
 </details>
