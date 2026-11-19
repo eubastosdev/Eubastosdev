@@ -1,6 +1,6 @@
-<p align="right"><a href="README.md"><img src="assets/lang-pt-off.svg" height="44" alt="Ler em português" /></a> <a href="README.en.md"><img src="assets/lang-en-on.svg" height="44" alt="English (current language)" /></a></p>
+<p align="right"><a href="README.md"><img src="assets/lang-pt-off.svg" height="44" alt="Ler em português" /></a> <a href="README.en.md"><img src="assets/lang-en-on.svg" height="44" alt="English (current language)" /></a> <a href="README.es.md"><img src="assets/lang-es-off.svg" height="44" alt="Leer en español" /></a></p>
 
-<p align="center"><picture><source media="(max-width: 600px)" srcset="assets/hero-en-mobile.svg" /><img src="assets/hero-en.svg" width="960" alt="Banner: EUBASTOSDEV, aspiring full-stack developer" /></picture></p>
+<p align="center"><picture><source media="(max-width: 600px)" srcset="assets/card-en-mobile.svg" /><img src="assets/card-en.svg" width="960" alt="Profile card: hi, I'm Luiz. Developer, engineer and student." /></picture></p>
 
 <p align="center">
   <a href="#about-me"><img src="assets/nav-about-en.svg" height="44" alt="About me" /></a>
