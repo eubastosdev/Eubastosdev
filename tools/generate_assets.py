@@ -138,15 +138,12 @@ def _frame(w, stroke=BORDER, fill=BG, sw=1.5):
 
 
 def nav_button(filename, text, label):
-    """Botão de navegação: 'Texto ↓' (seta para baixo = pula para a seção na página).
-
-    Convenção dos botões: ↗ abre link externo, → troca de página/idioma, ↓ desce na página.
-    """
+    """Botão de navegação: 'Texto →' (mesma seta dos botões de idioma)."""
     lab, tw = _label(18, text)
     w = round(18 + tw + 14 + 14 + 16)
     ax = 18 + tw + 14
     arrow = (
-        f'<path d="M{ax+7} 14 V30 M{ax+1} 24 L{ax+7} 30 L{ax+13} 24" fill="none" '
+        f'<path d="M{ax} 22 H{ax+13} M{ax+7} 15 L{ax+14} 22 L{ax+7} 29" fill="none" '
         f'stroke="{ACCENT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
     )
     write(filename, svg_wrap(w, BTN_H, label, _frame(w) + lab + arrow))
