@@ -78,7 +78,7 @@ HERO_CSS = f"""
 .rise{{animation:rise .8s ease-out .1s backwards}}
 .line{{transform-box:fill-box;transform-origin:center;animation:grow .7s ease-out .5s backwards}}
 .ch{{animation:show .01s steps(1) backwards}}
-.cur{{animation:appear .01s steps(1) backwards,blink 1.1s steps(1) infinite}}
+.cur{{animation:appear .01s steps(1) backwards,blink 1.1s steps(1) 5}}
 .fade{{animation:rise .8s ease-out 2.6s backwards}}
 @keyframes rise{{from{{opacity:0;transform:translateY(10px)}}}}
 @keyframes grow{{from{{transform:scaleX(0)}}}}
@@ -88,100 +88,69 @@ HERO_CSS = f"""
 """
 
 
-def hero(filename, w, h, name_size, name_w, role, role_size, role_cw, tech, tech_size, label):
-    cx = w / 2
-    name_y = h * 0.46
-    line_y = name_y + h * 0.075
-    role_y = line_y + h * 0.17
-    tech_y = role_y + h * 0.15
-    deco = h * 0.95
-    body = f"""<defs>
-  <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
-    <circle cx="2" cy="2" r="1.2" fill="{SURFACE}"/>
-  </pattern>
-  <radialGradient id="glow" cx="50%" cy="0%" r="75%">
-    <stop offset="0" stop-color="{ACCENT}" stop-opacity=".20"/>
-    <stop offset="1" stop-color="{ACCENT}" stop-opacity="0"/>
-  </radialGradient>
-</defs>
-<rect width="{w}" height="{h}" rx="20" fill="{BG}"/>
-<rect width="{w}" height="{h}" rx="20" fill="url(#dots)"/>
-<rect width="{w}" height="{h}" rx="20" fill="url(#glow)"/>
-<rect x=".75" y=".75" width="{w-1.5}" height="{h-1.5}" rx="19.5" fill="none" stroke="{BORDER}" stroke-width="1.5"/>
-<text x="{w*0.04:.0f}" y="{deco:.0f}" font-family="{MONO}" font-size="{h*0.85:.0f}" font-weight="700" fill="{ACCENT}" fill-opacity=".10">‹</text>
-<text x="{w*0.96:.0f}" y="{deco:.0f}" text-anchor="end" font-family="{MONO}" font-size="{h*0.85:.0f}" font-weight="700" fill="{ACCENT}" fill-opacity=".10">›</text>
-<text class="rise" x="{cx}" y="{name_y:.0f}" text-anchor="middle" font-family="{SANS}" font-size="{name_size}" font-weight="800" fill="{TEXT}" textLength="{name_w}" lengthAdjust="spacing"><tspan fill="{ACCENT}">‹</tspan>EUBASTOSDEV<tspan fill="{ACCENT}">/›</tspan></text>
-<rect class="line" x="{cx-50}" y="{line_y:.0f}" width="100" height="3" rx="1.5" fill="{ACCENT}"/>
-{typed_line(role, cx, f"{role_y:.0f}", role_size, role_cw, TEXT)}<text class="fade" x="{cx}" y="{tech_y:.0f}" text-anchor="middle" font-family="{SANS}" font-size="{tech_size}" fill="{MUTED}" letter-spacing="2">{escape(tech)}</text>
-"""
-    write(filename, svg_wrap(w, h, label, body, HERO_CSS))
-
-
 # --- Botões ----------------------------------------------------------------
-BTN_H = 44
+BTN_H = 44               # altura da imagem = área de clique confortável
+SURF_Y, SURF_H = 6, 32   # superfície visível, compacta (como na referência)
+BTN_FS = 13
+BTN_MID = SURF_Y + SURF_H / 2
 
 
-def _label(x, text, color=TEXT, char_w=8.4, size=15):
-    w = len(text) * char_w
+def _label(x, text, color=TEXT):
+    """Rótulo do botão. Largura vem da métrica real da fonte (sem forçar textLength)."""
+    w = text_width(text, BTN_FS)
     return (
-        f'<text x="{x}" y="27.5" font-family="{SANS}" font-size="{size}" font-weight="600" '
-        f'fill="{color}" textLength="{w:.1f}" lengthAdjust="spacingAndGlyphs">{escape(text)}</text>',
+        f'<text x="{x}" y="{BTN_MID + BTN_FS * 0.36:.1f}" font-family="{SANS}" font-size="{BTN_FS}" '
+        f'font-weight="600" fill="{color}">{escape(text)}</text>',
         w,
     )
 
 
-def _frame(w, stroke=BORDER, fill=BG, sw=1.5):
+def _frame(w, stroke=BORDER, fill=BG, sw=1.2):
     return (
-        f'<rect x="{sw/2}" y="{sw/2}" width="{w-sw}" height="{BTN_H-sw}" rx="10" '
+        f'<rect x="{sw/2+0.4}" y="{SURF_Y}" width="{w-sw-0.8}" height="{SURF_H}" rx="9" '
         f'fill="{fill}" stroke="{stroke}" stroke-width="{sw}"/>'
     )
 
 
+def _arrow_right(x, color):
+    y = BTN_MID
+    return (f'<path d="M{x} {y} H{x+11} M{x+6} {y-5} L{x+11} {y} L{x+6} {y+5}" fill="none" '
+            f'stroke="{color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>')
+
+
+def _arrow_diag(x, color):
+    y = BTN_MID
+    return (f'<path d="M{x} {y+5} L{x+9} {y-4} M{x+2} {y-4} H{x+9} V{y+3}" fill="none" '
+            f'stroke="{color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>')
+
+
+def _button(filename, text, label, arrow, primary=False):
+    """Botão compacto: 'Texto →'. primary=True preenche com a cor de destaque (ação principal)."""
+    fg = BG if primary else TEXT
+    lab, tw = _label(16, text, color=fg)
+    w = round(16 + tw + 10 + 11 + 14)
+    ax = 16 + tw + 10
+    frame = _frame(w, stroke=ACCENT if primary else BORDER, fill=ACCENT if primary else BG)
+    write(filename, svg_wrap(w, BTN_H, label, frame + lab + arrow(ax, BG if primary else ACCENT)))
+
+
 def nav_button(filename, text, label):
-    """Botão de navegação: 'Texto →' (mesma seta dos botões de idioma)."""
-    lab, tw = _label(18, text)
-    w = round(18 + tw + 14 + 14 + 16)
-    ax = 18 + tw + 14
-    arrow = (
-        f'<path d="M{ax} 22 H{ax+13} M{ax+7} 15 L{ax+14} 22 L{ax+7} 29" fill="none" '
-        f'stroke="{ACCENT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-    )
-    write(filename, svg_wrap(w, BTN_H, label, _frame(w) + lab + arrow))
+    """Navegação dentro da página (ação secundária)."""
+    _button(filename, text, label, _arrow_right)
 
 
-def contact_button(filename, text, label):
-    """Botão de contato: 'Texto ↗' com a seta desenhada (sem depender de glifo)."""
-    lab, tw = _label(18, text)
-    w = round(18 + tw + 14 + 12 + 16)
-    ax = 18 + tw + 14
-    arrow = (
-        f'<path d="M{ax} 29 L{ax+10} 19 M{ax+2} 19 H{ax+10} V27" fill="none" '
-        f'stroke="{ACCENT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-    )
-    write(filename, svg_wrap(w, BTN_H, label, _frame(w) + lab + arrow))
+def contact_button(filename, text, label, primary=False):
+    """Contato / link externo: seta diagonal ↗."""
+    _button(filename, text, label, _arrow_diag, primary=primary)
 
 
 def lang_button(filename, code, text, active, label):
-    """Botão de idioma no formato 'PT · Português →'.
-
-    Ativo: preenchido na cor de destaque. Inativo: escuro, com contorno.
-    A seta é desenhada (path), então não depende de nenhum glifo da fonte.
-    """
-    full = f"{code} · {text}"
-    fg = BG if active else TEXT
-    lab, tw = _label(18, full, color=fg)
-    w = round(18 + tw + 14 + 12 + 16)
-    ax = 18 + tw + 14
-    arrow = (
-        f'<path d="M{ax} 22 H{ax+13} M{ax+7} 15 L{ax+14} 22 L{ax+7} 29" fill="none" '
-        f'stroke="{BG if active else ACCENT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-    )
-    frame = _frame(w, stroke=ACCENT if active else BORDER, fill=ACCENT if active else BG)
-    write(filename, svg_wrap(w, BTN_H, label, frame + lab + arrow))
+    """Idioma: 'PT · Português →'. O ativo é a ação principal (preenchido)."""
+    _button(filename, f"{code} · {text}", label, _arrow_right, primary=active)
 
 
 # --- Rodapé ----------------------------------------------------------------
-FOOT_CSS = f".cur{{animation:blink 1.1s steps(1) infinite}}@keyframes blink{{0%,49%{{fill-opacity:1}}50%,100%{{fill-opacity:0}}}}"
+FOOT_CSS = f".cur{{animation:blink 1.1s steps(1) 5}}@keyframes blink{{0%,49%{{fill-opacity:1}}50%,100%{{fill-opacity:0}}}}"
 
 
 def footer(filename, text, label, w=960, h=120, cw=9.6, fs=16):
@@ -214,10 +183,8 @@ def footer(filename, text, label, w=960, h=120, cw=9.6, fs=16):
 
 # --- Card de perfil --------------------------------------------------------
 CARD_CSS = HERO_CSS + """
-.float{animation:float 4s ease-in-out infinite}
-.tw{animation:twinkle 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@keyframes twinkle{0%,100%{opacity:1}50%{opacity:.3}}
+.tw{animation:twinkle 10s ease-in-out infinite}
+@keyframes twinkle{0%,60%,100%{opacity:1}80%{opacity:.35}}
 """
 
 INDIGO = "#818CF8"
@@ -256,29 +223,29 @@ def pixel_monitor(x, y, cell=14):
         f'<rect x="{x + c * cell}" y="{y + r * cell}" width="{cell}" height="{cell}" fill="{color[v]}"/>'
         for r, row in enumerate(grid) for c, v in enumerate(row) if v != "."
     ]
-    return f'<g class="float" shape-rendering="crispEdges">{"".join(rects)}</g>'
+    return f'<g shape-rendering="crispEdges">{"".join(rects)}</g>'
 
 
 def sparkle(cx, cy, r, color=ACCENT, delay=0.0):
     k = r * 0.28
     d = (f"M{cx} {cy-r} L{cx+k:.1f} {cy-k:.1f} L{cx+r} {cy} L{cx+k:.1f} {cy+k:.1f} "
          f"L{cx} {cy+r} L{cx-k:.1f} {cy+k:.1f} L{cx-r} {cy} L{cx-k:.1f} {cy-k:.1f} Z")
-    return f'<path class="tw" style="animation-delay:{delay}s" d="{d}" fill="{color}"/>'
+    return f'<path class="tw" style="animation-delay:{delay*3:.1f}s" d="{d}" fill="{color}"/>'
 
 
-def chips(items, x, y, h=30):
+def chips(items, x, y, h=30, fs=14, cw=8.3, pad=16, gap=12):
     """Bolhas de informação (pills) com um ponto colorido à esquerda."""
     out, cx = [], x
     for (text, dot) in items:
-        tw = len(text) * 8.3
-        w = round(16 + 14 + tw + 16)
+        tw = len(text) * cw
+        w = round(pad + 14 + tw + pad)
         out.append(
             f'<rect x="{cx}" y="{y}" width="{w}" height="{h}" rx="{h/2}" fill="{SURFACE}" stroke="{BORDER}" stroke-width="1.2"/>'
-            f'<circle cx="{cx+17}" cy="{y+h/2}" r="4" fill="{dot}"/>'
-            f'<text x="{cx+30}" y="{y+h/2+5}" font-family="{SANS}" font-size="14" font-weight="600" fill="{TEXT}" '
+            f'<circle cx="{cx+pad+1}" cy="{y+h/2}" r="4" fill="{dot}"/>'
+            f'<text x="{cx+pad+14}" y="{y+h/2+fs*0.36:.1f}" font-family="{SANS}" font-size="{fs}" font-weight="600" fill="{TEXT}" '
             f'textLength="{tw:.1f}" lengthAdjust="spacingAndGlyphs">{escape(text)}</text>'
         )
-        cx += w + 12
+        cx += w + gap
     return "".join(out)
 
 
@@ -289,8 +256,8 @@ COPY = {
         sub="Eubastosdev · desenvolvedor full-stack em formação",
         t1="construindo, quebrando e aprendendo.", t2="React, Python e projetos que saem do papel.",
         cmd='$ git commit -m "evoluindo"',
-        chips=["desenvolvedor", "engenheiro", "estudante"], status="STATUS / EM EVOLUÇÃO",
-        alt="Card de perfil: olá, eu sou o Luiz. Desenvolvedor, engenheiro e estudante.",
+        chips=["desenvolvedor", "futuro engenheiro", "estudante"], status="STATUS / EM EVOLUÇÃO",
+        alt="Card de perfil: olá, eu sou o Luiz. Desenvolvedor, futuro engenheiro e estudante.",
     ),
     "es": dict(
         top="EUBASTOSDEV / PORTAFOLIO EN EVOLUCIÓN", eyebrow="DEV LOG // EN CONSTRUCCIÓN",
@@ -298,8 +265,8 @@ COPY = {
         sub="Eubastosdev · desarrollador full-stack en formación",
         t1="construyendo, rompiendo y aprendiendo.", t2="React, Python y proyectos que salen del papel.",
         cmd='$ git commit -m "evolucionando"',
-        chips=["desarrollador", "ingeniero", "estudiante"], status="STATUS / EN EVOLUCIÓN",
-        alt="Tarjeta de perfil: ¡hola, soy Luiz! Desarrollador, ingeniero y estudiante.",
+        chips=["desarrollador", "futuro ingeniero", "estudiante"], status="STATUS / EN EVOLUCIÓN",
+        alt="Tarjeta de perfil: ¡hola, soy Luiz! Desarrollador, futuro ingeniero y estudiante.",
     ),
     "en": dict(
         top="EUBASTOSDEV / EVOLVING PORTFOLIO", eyebrow="DEV LOG // WORK IN PROGRESS",
@@ -307,8 +274,8 @@ COPY = {
         sub="Eubastosdev · aspiring full-stack developer",
         t1="building, breaking and learning.", t2="React, Python and projects that ship.",
         cmd='$ git commit -m "evolving"',
-        chips=["developer", "engineer", "student"], status="STATUS / EVOLVING",
-        alt="Profile card: hi, I'm Luiz. Developer, engineer and student.",
+        chips=["developer", "future engineer", "student"], status="STATUS / EVOLVING",
+        alt="Profile card: hi, I'm Luiz. Developer, future engineer and student.",
     ),
 }
 
@@ -367,7 +334,8 @@ def profile_card(lang, mobile=False):
     body += typed_line(c["cmd"], L + 22, box_y + s(54, 56), s(17, 15), s(10.2, 9.0), TEXT, delay0=1.0, left=True)
     # bolhas
     dots = [ACCENT, INDIGO, GREEN]
-    body += chips(list(zip(c["chips"], dots)), L, y_chip)
+    body += (chips(list(zip(c["chips"], dots)), L, y_chip, h=28, fs=12.5, cw=7.4, pad=12, gap=8) if mobile
+             else chips(list(zip(c["chips"], dots)), L, y_chip))
 
     if not mobile:
         cx, cy = 762, 236
@@ -399,7 +367,7 @@ TOOLS = [
     ("npm", "npm"),
 ]
 TILE = "#F8FAFC"
-AW_BOLD = {' ': 278, '.': 278, '5': 556, 'A': 722, 'B': 722, 'C': 722, 'D': 722, 'F': 611, 'G': 778, 'H': 722, 'J': 556, 'L': 611, 'M': 833, 'N': 722, 'P': 667, 'Q': 778, 'R': 722, 'S': 667, 'T': 611, 'W': 944, 'a': 556, 'b': 611, 'c': 556, 'd': 611, 'e': 556, 'g': 611, 'h': 611, 'i': 278, 'j': 278, 'l': 278, 'm': 889, 'n': 611, 'o': 611, 'p': 611, 'r': 389, 's': 556, 't': 333, 'u': 611, 'v': 556, 'w': 778, 'y': 556, 'z': 500}  # Liberation Sans Bold (métrica do Arial)
+AW_BOLD = {' ': 278, '!': 333, '"': 474, '#': 556, '$': 556, '%': 889, '&': 722, "'": 238, '(': 333, ')': 333, '*': 389, '+': 584, ',': 278, '-': 333, '.': 278, '/': 278, '0': 556, '1': 556, '2': 556, '3': 556, '4': 556, '5': 556, '6': 556, '7': 556, '8': 556, '9': 556, ':': 333, ';': 333, '<': 584, '=': 584, '>': 584, '?': 611, '@': 975, 'A': 722, 'B': 722, 'C': 722, 'D': 722, 'E': 667, 'F': 611, 'G': 778, 'H': 722, 'I': 278, 'J': 556, 'K': 722, 'L': 611, 'M': 833, 'N': 722, 'O': 778, 'P': 667, 'Q': 778, 'R': 722, 'S': 667, 'T': 611, 'U': 722, 'V': 667, 'W': 944, 'X': 667, 'Y': 667, 'Z': 611, '[': 333, '\\': 278, ']': 333, '^': 584, '_': 556, '`': 333, 'a': 556, 'b': 611, 'c': 556, 'd': 611, 'e': 556, 'f': 333, 'g': 611, 'h': 611, 'i': 278, 'j': 278, 'k': 556, 'l': 278, 'm': 889, 'n': 611, 'o': 611, 'p': 611, 'q': 611, 'r': 389, 's': 556, 't': 333, 'u': 611, 'v': 556, 'w': 778, 'x': 556, 'y': 556, 'z': 500, '{': 389, '|': 280, '}': 389, '~': 584, 'á': 556, 'à': 556, 'â': 556, 'ã': 556, 'é': 556, 'ê': 556, 'í': 278, 'ó': 611, 'ô': 611, 'õ': 611, 'ú': 611, 'ç': 556, 'ñ': 611, 'Á': 722, 'É': 667, 'Í': 278, 'Ó': 778, 'Ú': 722, 'Ç': 722, 'Ñ': 722, '¡': 333, '¿': 611, '·': 333}  # Liberation Sans Bold (métrica do Arial)
 TOOL_H = 56
 
 
@@ -436,17 +404,6 @@ def tool_card(key, name):
 
 # --- Geração ---------------------------------------------------------------
 def main():
-    # Banners (desktop 960x260 e mobile 480x260)
-    for lang, role_d, role_m, tech, alt in [
-        ("pt", "Desenvolvedor full-stack em formação", "Dev full-stack em formação",
-         "REACT  ·  PYTHON", "Banner: EUBASTOSDEV, desenvolvedor full-stack em formação"),
-        ("en", "Aspiring full-stack developer", "Aspiring full-stack dev",
-         "REACT  ·  PYTHON", "Banner: EUBASTOSDEV, aspiring full-stack developer"),
-        ("es", "Desarrollador full-stack en formación", "Dev full-stack en formación",
-         "REACT  ·  PYTHON", "Banner: EUBASTOSDEV, desarrollador full-stack en formación"),
-    ]:
-        hero(f"hero-{lang}.svg", 960, 260, 66, 640, role_d, 24, 14.4, tech, 15, alt)
-        hero(f"hero-{lang}-mobile.svg", 480, 260, 38, 380, role_m, 17, 10.2, tech, 13, alt)
 
     # Idioma (rótulos neutros, servem aos dois READMEs)
     for code, name in [("PT", "Português"), ("EN", "English"), ("ES", "Español")]:
@@ -466,7 +423,7 @@ def main():
             nav_button(f"nav-{key}-{lang}.svg", text, text)
 
     # Contato (rótulos iguais nos dois idiomas)
-    contact_button("contact-linkedin.svg", "LinkedIn", "LinkedIn")
+    contact_button("contact-linkedin.svg", "LinkedIn", "LinkedIn", primary=True)
     contact_button("contact-email.svg", "E-mail", "E-mail")
     contact_button("contact-github.svg", "GitHub", "GitHub")
 

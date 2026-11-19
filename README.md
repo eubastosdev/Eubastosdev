@@ -1,6 +1,6 @@
 <p align="right"><a href="README.md"><img src="assets/lang-pt-on.svg" height="44" alt="Português (idioma atual)" /></a> <a href="README.en.md"><img src="assets/lang-en-off.svg" height="44" alt="Read in English" /></a> <a href="README.es.md"><img src="assets/lang-es-off.svg" height="44" alt="Leer en español" /></a></p>
 
-<p align="center"><picture><source media="(max-width: 600px)" srcset="assets/card-pt-mobile.svg" /><img src="assets/card-pt.svg" width="960" alt="Card de perfil: olá, eu sou o Luiz. Desenvolvedor, engenheiro e estudante." /></picture></p>
+<p align="center"><picture><source media="(max-width: 600px)" srcset="assets/card-pt-mobile.svg" /><img src="assets/card-pt.svg" width="960" alt="Card de perfil: olá, eu sou o Luiz. Desenvolvedor, futuro engenheiro e estudante." /></picture></p>
 
 <p align="center">
   <a href="#sobre-mim"><img src="assets/nav-about-pt.svg" height="44" alt="Sobre mim" /></a>
@@ -43,18 +43,19 @@
 ## Atividade
 
 <div align="center">
-  <img height="400" alt="Gato" src="https://imgs.search.brave.com/lt-EaWO9j90sQKui9WTgLwshXMkIvlrMI-vdbIlw7nA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5lYXN5LXBlYXN5/LmFpLzIyM2Y4OWNm/LTRjM2ItNDNkMS1i/NGI3LWE0Njg4Y2Fi/ODM2ZS85YjMxYTlh/ZC0yMzkxLTRlMzgt/YTdlMi0zNzkzZmRi/NThhNGZfdGh1bWIu/d2VicA" />
+  <img height="400" alt="Ilustração de um gato" src="https://imgs.search.brave.com/lt-EaWO9j90sQKui9WTgLwshXMkIvlrMI-vdbIlw7nA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5lYXN5LXBlYXN5/LmFpLzIyM2Y4OWNm/LTRjM2ItNDNkMS1i/NGI3LWE0Njg4Y2Fi/ODM2ZS85YjMxYTlh/ZC0yMzkxLTRlMzgt/YTdlMi0zNzkzZmRi/NThhNGZfdGh1bWIu/d2VicA" />
 </div>
 
-<img width="100%" src="https://raw.githubusercontent.com/Eubastosdev/Eubastosdev/snake-output/snake.svg" alt="Animação da cobrinha comendo o gráfico de contribuições" />
+<img width="100%" src="assets/snake.svg" alt="Animação da cobrinha comendo o gráfico de contribuições" />
 
 ## Contato
 
-<!-- TODO(Luiz): trocar os dois links abaixo pelos seus de verdade -->
 <p align="center">
-  <a href="https://www.linkedin.com/in/SEU-USUARIO/"><img src="assets/contact-linkedin.svg" height="44" alt="LinkedIn" /></a>
-  <a href="mailto:seu-email@exemplo.com"><img src="assets/contact-email.svg" height="44" alt="Enviar e-mail" /></a>
+  <a href="https://www.linkedin.com/in/luiz-pereira-3803a4335"><img src="assets/contact-linkedin.svg" height="44" alt="LinkedIn" /></a>
+  <a href="mailto:eudev.agenda@gmail.com"><img src="assets/contact-email.svg" height="44" alt="Enviar e-mail" /></a>
   <a href="https://github.com/Eubastosdev"><img src="assets/contact-github.svg" height="44" alt="GitHub" /></a>
 </p>
+
+<p align="center"><sub>LinkedIn: <a href="https://www.linkedin.com/in/luiz-pereira-3803a4335">luiz-pereira-3803a4335</a> · E-mail: eudev.agenda@gmail.com · GitHub: <a href="https://github.com/Eubastosdev">@Eubastosdev</a></sub></p>
 
 <p align="center"><picture><source media="(max-width: 600px)" srcset="assets/footer-pt-mobile.svg" /><img src="assets/footer-pt.svg" width="960" alt="Aprendendo em público, um commit de cada vez." /></picture></p>
