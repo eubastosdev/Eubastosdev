@@ -1,6 +1,6 @@
 <p align="right"><a href="README.md"><img src="assets/lang-pt-on.svg" height="44" alt="Português (idioma atual)" /></a> <a href="README.en.md"><img src="assets/lang-en-off.svg" height="44" alt="Read in English" /></a> <a href="README.es.md"><img src="assets/lang-es-off.svg" height="44" alt="Leer en español" /></a></p>
 
-<p align="center"><picture><source media="(max-width: 600px)" srcset="assets/card-pt-mobile.svg" /><img src="assets/card-pt.svg" width="960" alt="Card de perfil: olá, eu sou o Luiz. Desenvolvedor, engenheiro e estudante." /></picture></p>
+<p align="center"><picture><source media="(max-width: 600px)" srcset="assets/card-pt-mobile.svg" /><img src="assets/card-pt.svg" width="960" alt="Card de perfil: olá, eu sou o Luiz. Desenvolvedor, futuro engenheiro e estudante." /></picture></p>
 
 <p align="center">
   <a href="#sobre-mim"><img src="assets/nav-about-pt.svg" height="44" alt="Sobre mim" /></a>

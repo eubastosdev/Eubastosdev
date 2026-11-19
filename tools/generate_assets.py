@@ -266,19 +266,19 @@ def sparkle(cx, cy, r, color=ACCENT, delay=0.0):
     return f'<path class="tw" style="animation-delay:{delay}s" d="{d}" fill="{color}"/>'
 
 
-def chips(items, x, y, h=30):
+def chips(items, x, y, h=30, fs=14, cw=8.3, pad=16, gap=12):
     """Bolhas de informação (pills) com um ponto colorido à esquerda."""
     out, cx = [], x
     for (text, dot) in items:
-        tw = len(text) * 8.3
-        w = round(16 + 14 + tw + 16)
+        tw = len(text) * cw
+        w = round(pad + 14 + tw + pad)
         out.append(
             f'<rect x="{cx}" y="{y}" width="{w}" height="{h}" rx="{h/2}" fill="{SURFACE}" stroke="{BORDER}" stroke-width="1.2"/>'
-            f'<circle cx="{cx+17}" cy="{y+h/2}" r="4" fill="{dot}"/>'
-            f'<text x="{cx+30}" y="{y+h/2+5}" font-family="{SANS}" font-size="14" font-weight="600" fill="{TEXT}" '
+            f'<circle cx="{cx+pad+1}" cy="{y+h/2}" r="4" fill="{dot}"/>'
+            f'<text x="{cx+pad+14}" y="{y+h/2+fs*0.36:.1f}" font-family="{SANS}" font-size="{fs}" font-weight="600" fill="{TEXT}" '
             f'textLength="{tw:.1f}" lengthAdjust="spacingAndGlyphs">{escape(text)}</text>'
         )
-        cx += w + 12
+        cx += w + gap
     return "".join(out)
 
 
@@ -289,8 +289,8 @@ COPY = {
         sub="Eubastosdev · desenvolvedor full-stack em formação",
         t1="construindo, quebrando e aprendendo.", t2="React, Python e projetos que saem do papel.",
         cmd='$ git commit -m "evoluindo"',
-        chips=["desenvolvedor", "engenheiro", "estudante"], status="STATUS / EM EVOLUÇÃO",
-        alt="Card de perfil: olá, eu sou o Luiz. Desenvolvedor, engenheiro e estudante.",
+        chips=["desenvolvedor", "futuro engenheiro", "estudante"], status="STATUS / EM EVOLUÇÃO",
+        alt="Card de perfil: olá, eu sou o Luiz. Desenvolvedor, futuro engenheiro e estudante.",
     ),
     "es": dict(
         top="EUBASTOSDEV / PORTAFOLIO EN EVOLUCIÓN", eyebrow="DEV LOG // EN CONSTRUCCIÓN",
@@ -298,8 +298,8 @@ COPY = {
         sub="Eubastosdev · desarrollador full-stack en formación",
         t1="construyendo, rompiendo y aprendiendo.", t2="React, Python y proyectos que salen del papel.",
         cmd='$ git commit -m "evolucionando"',
-        chips=["desarrollador", "ingeniero", "estudiante"], status="STATUS / EN EVOLUCIÓN",
-        alt="Tarjeta de perfil: ¡hola, soy Luiz! Desarrollador, ingeniero y estudiante.",
+        chips=["desarrollador", "futuro ingeniero", "estudiante"], status="STATUS / EN EVOLUCIÓN",
+        alt="Tarjeta de perfil: ¡hola, soy Luiz! Desarrollador, futuro ingeniero y estudiante.",
     ),
     "en": dict(
         top="EUBASTOSDEV / EVOLVING PORTFOLIO", eyebrow="DEV LOG // WORK IN PROGRESS",
@@ -307,8 +307,8 @@ COPY = {
         sub="Eubastosdev · aspiring full-stack developer",
         t1="building, breaking and learning.", t2="React, Python and projects that ship.",
         cmd='$ git commit -m "evolving"',
-        chips=["developer", "engineer", "student"], status="STATUS / EVOLVING",
-        alt="Profile card: hi, I'm Luiz. Developer, engineer and student.",
+        chips=["developer", "future engineer", "student"], status="STATUS / EVOLVING",
+        alt="Profile card: hi, I'm Luiz. Developer, future engineer and student.",
     ),
 }
 
@@ -367,7 +367,8 @@ def profile_card(lang, mobile=False):
     body += typed_line(c["cmd"], L + 22, box_y + s(54, 56), s(17, 15), s(10.2, 9.0), TEXT, delay0=1.0, left=True)
     # bolhas
     dots = [ACCENT, INDIGO, GREEN]
-    body += chips(list(zip(c["chips"], dots)), L, y_chip)
+    body += (chips(list(zip(c["chips"], dots)), L, y_chip, h=28, fs=12.5, cw=7.4, pad=12, gap=8) if mobile
+             else chips(list(zip(c["chips"], dots)), L, y_chip))
 
     if not mobile:
         cx, cy = 762, 236
