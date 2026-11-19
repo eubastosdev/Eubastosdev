@@ -12,7 +12,7 @@
 ## Sobre mí
 
 - 🌎 Vivo en Belo Horizonte, Minas Gerais, Brasil
-- 🎓 Cursando Análisis y Desarrollo de Sistemas (conclusión prevista para 2027) · posgrado en Ingeniería de Software <!-- TODO(Luiz): confirmar el estado del posgrado antes de publicar -->
+- 🎓 Cursando Análisis y Desarrollo de Sistemas (conclusión prevista para 2027)
 - 🎯 Enfoque en React y Python, siempre explorando nuevas herramientas
 - 📈 Aprendo construyendo: afilando mi stack en proyectos personales y colaborativos
 

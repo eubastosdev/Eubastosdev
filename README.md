@@ -12,7 +12,7 @@
 ## Sobre mim
 
 - 🌎 Moro em Belo Horizonte, Minas Gerais, Brasil
-- 🎓 Cursando Análise e Desenvolvimento de Sistemas (conclusão prevista para 2027) · pós-graduação em Engenharia de Software <!-- TODO(Luiz): confirmar o status da pós antes de publicar -->
+- 🎓 Cursando Análise e Desenvolvimento de Sistemas (conclusão prevista para 2027)
 - 🎯 Foco em React e Python, sempre explorando novas ferramentas
 - 📈 Aprendo construindo: afiando minha stack em projetos pessoais e colaborativos
 

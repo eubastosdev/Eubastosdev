@@ -12,7 +12,7 @@
 ## About me
 
 - 🌎 Based in Belo Horizonte, Minas Gerais, Brazil
-- 🎓 Studying Systems Analysis and Development (expected graduation in 2027) · postgraduate degree in Software Engineering <!-- TODO(Luiz): confirm the postgraduate status before publishing -->
+- 🎓 Studying Systems Analysis and Development (expected graduation in 2027)
 - 🎯 Focused on React and Python, always exploring new tools
 - 📈 Learning by building: sharpening my stack through personal and collaborative projects
 
