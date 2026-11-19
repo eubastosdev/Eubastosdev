@@ -78,7 +78,7 @@ HERO_CSS = f"""
 .rise{{animation:rise .8s ease-out .1s backwards}}
 .line{{transform-box:fill-box;transform-origin:center;animation:grow .7s ease-out .5s backwards}}
 .ch{{animation:show .01s steps(1) backwards}}
-.cur{{animation:appear .01s steps(1) backwards,blink 1.1s steps(1) infinite}}
+.cur{{animation:appear .01s steps(1) backwards,blink 1.1s steps(1) 5}}
 .fade{{animation:rise .8s ease-out 2.6s backwards}}
 @keyframes rise{{from{{opacity:0;transform:translateY(10px)}}}}
 @keyframes grow{{from{{transform:scaleX(0)}}}}
@@ -118,70 +118,68 @@ def hero(filename, w, h, name_size, name_w, role, role_size, role_cw, tech, tech
 
 
 # --- Botões ----------------------------------------------------------------
-BTN_H = 44
+BTN_H = 44               # altura da imagem = área de clique confortável
+SURF_Y, SURF_H = 6, 32   # superfície visível, compacta (como na referência)
+BTN_FS = 13
+BTN_MID = SURF_Y + SURF_H / 2
 
 
-def _label(x, text, color=TEXT, char_w=8.4, size=15):
-    w = len(text) * char_w
+def _label(x, text, color=TEXT):
+    """Rótulo do botão. Largura vem da métrica real da fonte (sem forçar textLength)."""
+    w = text_width(text, BTN_FS)
     return (
-        f'<text x="{x}" y="27.5" font-family="{SANS}" font-size="{size}" font-weight="600" '
-        f'fill="{color}" textLength="{w:.1f}" lengthAdjust="spacingAndGlyphs">{escape(text)}</text>',
+        f'<text x="{x}" y="{BTN_MID + BTN_FS * 0.36:.1f}" font-family="{SANS}" font-size="{BTN_FS}" '
+        f'font-weight="600" fill="{color}">{escape(text)}</text>',
         w,
     )
 
 
-def _frame(w, stroke=BORDER, fill=BG, sw=1.5):
+def _frame(w, stroke=BORDER, fill=BG, sw=1.2):
     return (
-        f'<rect x="{sw/2}" y="{sw/2}" width="{w-sw}" height="{BTN_H-sw}" rx="10" '
+        f'<rect x="{sw/2+0.4}" y="{SURF_Y}" width="{w-sw-0.8}" height="{SURF_H}" rx="9" '
         f'fill="{fill}" stroke="{stroke}" stroke-width="{sw}"/>'
     )
 
 
+def _arrow_right(x, color):
+    y = BTN_MID
+    return (f'<path d="M{x} {y} H{x+11} M{x+6} {y-5} L{x+11} {y} L{x+6} {y+5}" fill="none" '
+            f'stroke="{color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>')
+
+
+def _arrow_diag(x, color):
+    y = BTN_MID
+    return (f'<path d="M{x} {y+5} L{x+9} {y-4} M{x+2} {y-4} H{x+9} V{y+3}" fill="none" '
+            f'stroke="{color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>')
+
+
+def _button(filename, text, label, arrow, primary=False):
+    """Botão compacto: 'Texto →'. primary=True preenche com a cor de destaque (ação principal)."""
+    fg = BG if primary else TEXT
+    lab, tw = _label(16, text, color=fg)
+    w = round(16 + tw + 10 + 11 + 14)
+    ax = 16 + tw + 10
+    frame = _frame(w, stroke=ACCENT if primary else BORDER, fill=ACCENT if primary else BG)
+    write(filename, svg_wrap(w, BTN_H, label, frame + lab + arrow(ax, BG if primary else ACCENT)))
+
+
 def nav_button(filename, text, label):
-    """Botão de navegação: 'Texto →' (mesma seta dos botões de idioma)."""
-    lab, tw = _label(18, text)
-    w = round(18 + tw + 14 + 14 + 16)
-    ax = 18 + tw + 14
-    arrow = (
-        f'<path d="M{ax} 22 H{ax+13} M{ax+7} 15 L{ax+14} 22 L{ax+7} 29" fill="none" '
-        f'stroke="{ACCENT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-    )
-    write(filename, svg_wrap(w, BTN_H, label, _frame(w) + lab + arrow))
+    """Navegação dentro da página (ação secundária)."""
+    _button(filename, text, label, _arrow_right)
 
 
-def contact_button(filename, text, label):
-    """Botão de contato: 'Texto ↗' com a seta desenhada (sem depender de glifo)."""
-    lab, tw = _label(18, text)
-    w = round(18 + tw + 14 + 12 + 16)
-    ax = 18 + tw + 14
-    arrow = (
-        f'<path d="M{ax} 29 L{ax+10} 19 M{ax+2} 19 H{ax+10} V27" fill="none" '
-        f'stroke="{ACCENT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-    )
-    write(filename, svg_wrap(w, BTN_H, label, _frame(w) + lab + arrow))
+def contact_button(filename, text, label, primary=False):
+    """Contato / link externo: seta diagonal ↗."""
+    _button(filename, text, label, _arrow_diag, primary=primary)
 
 
 def lang_button(filename, code, text, active, label):
-    """Botão de idioma no formato 'PT · Português →'.
-
-    Ativo: preenchido na cor de destaque. Inativo: escuro, com contorno.
-    A seta é desenhada (path), então não depende de nenhum glifo da fonte.
-    """
-    full = f"{code} · {text}"
-    fg = BG if active else TEXT
-    lab, tw = _label(18, full, color=fg)
-    w = round(18 + tw + 14 + 12 + 16)
-    ax = 18 + tw + 14
-    arrow = (
-        f'<path d="M{ax} 22 H{ax+13} M{ax+7} 15 L{ax+14} 22 L{ax+7} 29" fill="none" '
-        f'stroke="{BG if active else ACCENT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-    )
-    frame = _frame(w, stroke=ACCENT if active else BORDER, fill=ACCENT if active else BG)
-    write(filename, svg_wrap(w, BTN_H, label, frame + lab + arrow))
+    """Idioma: 'PT · Português →'. O ativo é a ação principal (preenchido)."""
+    _button(filename, f"{code} · {text}", label, _arrow_right, primary=active)
 
 
 # --- Rodapé ----------------------------------------------------------------
-FOOT_CSS = f".cur{{animation:blink 1.1s steps(1) infinite}}@keyframes blink{{0%,49%{{fill-opacity:1}}50%,100%{{fill-opacity:0}}}}"
+FOOT_CSS = f".cur{{animation:blink 1.1s steps(1) 5}}@keyframes blink{{0%,49%{{fill-opacity:1}}50%,100%{{fill-opacity:0}}}}"
 
 
 def footer(filename, text, label, w=960, h=120, cw=9.6, fs=16):
@@ -214,10 +212,8 @@ def footer(filename, text, label, w=960, h=120, cw=9.6, fs=16):
 
 # --- Card de perfil --------------------------------------------------------
 CARD_CSS = HERO_CSS + """
-.float{animation:float 4s ease-in-out infinite}
-.tw{animation:twinkle 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@keyframes twinkle{0%,100%{opacity:1}50%{opacity:.3}}
+.tw{animation:twinkle 10s ease-in-out infinite}
+@keyframes twinkle{0%,60%,100%{opacity:1}80%{opacity:.35}}
 """
 
 INDIGO = "#818CF8"
@@ -256,14 +252,14 @@ def pixel_monitor(x, y, cell=14):
         f'<rect x="{x + c * cell}" y="{y + r * cell}" width="{cell}" height="{cell}" fill="{color[v]}"/>'
         for r, row in enumerate(grid) for c, v in enumerate(row) if v != "."
     ]
-    return f'<g class="float" shape-rendering="crispEdges">{"".join(rects)}</g>'
+    return f'<g shape-rendering="crispEdges">{"".join(rects)}</g>'
 
 
 def sparkle(cx, cy, r, color=ACCENT, delay=0.0):
     k = r * 0.28
     d = (f"M{cx} {cy-r} L{cx+k:.1f} {cy-k:.1f} L{cx+r} {cy} L{cx+k:.1f} {cy+k:.1f} "
          f"L{cx} {cy+r} L{cx-k:.1f} {cy+k:.1f} L{cx-r} {cy} L{cx-k:.1f} {cy-k:.1f} Z")
-    return f'<path class="tw" style="animation-delay:{delay}s" d="{d}" fill="{color}"/>'
+    return f'<path class="tw" style="animation-delay:{delay*3:.1f}s" d="{d}" fill="{color}"/>'
 
 
 def chips(items, x, y, h=30, fs=14, cw=8.3, pad=16, gap=12):
@@ -400,7 +396,7 @@ TOOLS = [
     ("npm", "npm"),
 ]
 TILE = "#F8FAFC"
-AW_BOLD = {' ': 278, '.': 278, '5': 556, 'A': 722, 'B': 722, 'C': 722, 'D': 722, 'F': 611, 'G': 778, 'H': 722, 'J': 556, 'L': 611, 'M': 833, 'N': 722, 'P': 667, 'Q': 778, 'R': 722, 'S': 667, 'T': 611, 'W': 944, 'a': 556, 'b': 611, 'c': 556, 'd': 611, 'e': 556, 'g': 611, 'h': 611, 'i': 278, 'j': 278, 'l': 278, 'm': 889, 'n': 611, 'o': 611, 'p': 611, 'r': 389, 's': 556, 't': 333, 'u': 611, 'v': 556, 'w': 778, 'y': 556, 'z': 500}  # Liberation Sans Bold (métrica do Arial)
+AW_BOLD = {' ': 278, '!': 333, '"': 474, '#': 556, '$': 556, '%': 889, '&': 722, "'": 238, '(': 333, ')': 333, '*': 389, '+': 584, ',': 278, '-': 333, '.': 278, '/': 278, '0': 556, '1': 556, '2': 556, '3': 556, '4': 556, '5': 556, '6': 556, '7': 556, '8': 556, '9': 556, ':': 333, ';': 333, '<': 584, '=': 584, '>': 584, '?': 611, '@': 975, 'A': 722, 'B': 722, 'C': 722, 'D': 722, 'E': 667, 'F': 611, 'G': 778, 'H': 722, 'I': 278, 'J': 556, 'K': 722, 'L': 611, 'M': 833, 'N': 722, 'O': 778, 'P': 667, 'Q': 778, 'R': 722, 'S': 667, 'T': 611, 'U': 722, 'V': 667, 'W': 944, 'X': 667, 'Y': 667, 'Z': 611, '[': 333, '\\': 278, ']': 333, '^': 584, '_': 556, '`': 333, 'a': 556, 'b': 611, 'c': 556, 'd': 611, 'e': 556, 'f': 333, 'g': 611, 'h': 611, 'i': 278, 'j': 278, 'k': 556, 'l': 278, 'm': 889, 'n': 611, 'o': 611, 'p': 611, 'q': 611, 'r': 389, 's': 556, 't': 333, 'u': 611, 'v': 556, 'w': 778, 'x': 556, 'y': 556, 'z': 500, '{': 389, '|': 280, '}': 389, '~': 584, 'á': 556, 'à': 556, 'â': 556, 'ã': 556, 'é': 556, 'ê': 556, 'í': 278, 'ó': 611, 'ô': 611, 'õ': 611, 'ú': 611, 'ç': 556, 'ñ': 611, 'Á': 722, 'É': 667, 'Í': 278, 'Ó': 778, 'Ú': 722, 'Ç': 722, 'Ñ': 722, '¡': 333, '¿': 611, '·': 333}  # Liberation Sans Bold (métrica do Arial)
 TOOL_H = 56
 
 
@@ -467,7 +463,7 @@ def main():
             nav_button(f"nav-{key}-{lang}.svg", text, text)
 
     # Contato (rótulos iguais nos dois idiomas)
-    contact_button("contact-linkedin.svg", "LinkedIn", "LinkedIn")
+    contact_button("contact-linkedin.svg", "LinkedIn", "LinkedIn", primary=True)
     contact_button("contact-email.svg", "E-mail", "E-mail")
     contact_button("contact-github.svg", "GitHub", "GitHub")
 
