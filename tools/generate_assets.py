@@ -88,35 +88,6 @@ HERO_CSS = f"""
 """
 
 
-def hero(filename, w, h, name_size, name_w, role, role_size, role_cw, tech, tech_size, label):
-    cx = w / 2
-    name_y = h * 0.46
-    line_y = name_y + h * 0.075
-    role_y = line_y + h * 0.17
-    tech_y = role_y + h * 0.15
-    deco = h * 0.95
-    body = f"""<defs>
-  <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
-    <circle cx="2" cy="2" r="1.2" fill="{SURFACE}"/>
-  </pattern>
-  <radialGradient id="glow" cx="50%" cy="0%" r="75%">
-    <stop offset="0" stop-color="{ACCENT}" stop-opacity=".20"/>
-    <stop offset="1" stop-color="{ACCENT}" stop-opacity="0"/>
-  </radialGradient>
-</defs>
-<rect width="{w}" height="{h}" rx="20" fill="{BG}"/>
-<rect width="{w}" height="{h}" rx="20" fill="url(#dots)"/>
-<rect width="{w}" height="{h}" rx="20" fill="url(#glow)"/>
-<rect x=".75" y=".75" width="{w-1.5}" height="{h-1.5}" rx="19.5" fill="none" stroke="{BORDER}" stroke-width="1.5"/>
-<text x="{w*0.04:.0f}" y="{deco:.0f}" font-family="{MONO}" font-size="{h*0.85:.0f}" font-weight="700" fill="{ACCENT}" fill-opacity=".10">‹</text>
-<text x="{w*0.96:.0f}" y="{deco:.0f}" text-anchor="end" font-family="{MONO}" font-size="{h*0.85:.0f}" font-weight="700" fill="{ACCENT}" fill-opacity=".10">›</text>
-<text class="rise" x="{cx}" y="{name_y:.0f}" text-anchor="middle" font-family="{SANS}" font-size="{name_size}" font-weight="800" fill="{TEXT}" textLength="{name_w}" lengthAdjust="spacing"><tspan fill="{ACCENT}">‹</tspan>EUBASTOSDEV<tspan fill="{ACCENT}">/›</tspan></text>
-<rect class="line" x="{cx-50}" y="{line_y:.0f}" width="100" height="3" rx="1.5" fill="{ACCENT}"/>
-{typed_line(role, cx, f"{role_y:.0f}", role_size, role_cw, TEXT)}<text class="fade" x="{cx}" y="{tech_y:.0f}" text-anchor="middle" font-family="{SANS}" font-size="{tech_size}" fill="{MUTED}" letter-spacing="2">{escape(tech)}</text>
-"""
-    write(filename, svg_wrap(w, h, label, body, HERO_CSS))
-
-
 # --- Botões ----------------------------------------------------------------
 BTN_H = 44               # altura da imagem = área de clique confortável
 SURF_Y, SURF_H = 6, 32   # superfície visível, compacta (como na referência)
@@ -433,17 +404,6 @@ def tool_card(key, name):
 
 # --- Geração ---------------------------------------------------------------
 def main():
-    # Banners (desktop 960x260 e mobile 480x260)
-    for lang, role_d, role_m, tech, alt in [
-        ("pt", "Desenvolvedor full-stack em formação", "Dev full-stack em formação",
-         "REACT  ·  PYTHON", "Banner: EUBASTOSDEV, desenvolvedor full-stack em formação"),
-        ("en", "Aspiring full-stack developer", "Aspiring full-stack dev",
-         "REACT  ·  PYTHON", "Banner: EUBASTOSDEV, aspiring full-stack developer"),
-        ("es", "Desarrollador full-stack en formación", "Dev full-stack en formación",
-         "REACT  ·  PYTHON", "Banner: EUBASTOSDEV, desarrollador full-stack en formación"),
-    ]:
-        hero(f"hero-{lang}.svg", 960, 260, 66, 640, role_d, 24, 14.4, tech, 15, alt)
-        hero(f"hero-{lang}-mobile.svg", 480, 260, 38, 380, role_m, 17, 10.2, tech, 13, alt)
 
     # Idioma (rótulos neutros, servem aos dois READMEs)
     for code, name in [("PT", "Português"), ("EN", "English"), ("ES", "Español")]:

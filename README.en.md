@@ -43,7 +43,7 @@
 ## Activity
 
 <div align="center">
-  <img height="400" alt="Cat" src="https://imgs.search.brave.com/lt-EaWO9j90sQKui9WTgLwshXMkIvlrMI-vdbIlw7nA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5lYXN5LXBlYXN5/LmFpLzIyM2Y4OWNm/LTRjM2ItNDNkMS1i/NGI3LWE0Njg4Y2Fi/ODM2ZS85YjMxYTlh/ZC0yMzkxLTRlMzgt/YTdlMi0zNzkzZmRi/NThhNGZfdGh1bWIu/d2VicA" />
+  <img height="400" alt="Cat illustration" src="https://imgs.search.brave.com/lt-EaWO9j90sQKui9WTgLwshXMkIvlrMI-vdbIlw7nA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5lYXN5LXBlYXN5/LmFpLzIyM2Y4OWNm/LTRjM2ItNDNkMS1i/NGI3LWE0Njg4Y2Fi/ODM2ZS85YjMxYTlh/ZC0yMzkxLTRlMzgt/YTdlMi0zNzkzZmRi/NThhNGZfdGh1bWIu/d2VicA" />
 </div>
 
 <img width="100%" src="https://raw.githubusercontent.com/Eubastosdev/Eubastosdev/snake-output/snake.svg" alt="Snake animation eating my contribution graph" />
@@ -55,5 +55,7 @@
   <a href="mailto:eudev.agenda@gmail.com"><img src="assets/contact-email.svg" height="44" alt="Send an email" /></a>
   <a href="https://github.com/Eubastosdev"><img src="assets/contact-github.svg" height="44" alt="GitHub" /></a>
 </p>
+
+<p align="center"><sub>LinkedIn: <a href="https://www.linkedin.com/in/luiz-pereira-3803a4335">luiz-pereira-3803a4335</a> · Email: eudev.agenda@gmail.com · GitHub: <a href="https://github.com/Eubastosdev">@Eubastosdev</a></sub></p>
 
 <p align="center"><picture><source media="(max-width: 600px)" srcset="assets/footer-en-mobile.svg" /><img src="assets/footer-en.svg" width="960" alt="Learning in public, one commit at a time." /></picture></p>
