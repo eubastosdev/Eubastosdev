@@ -46,7 +46,7 @@
   <img height="400" alt="Ilustração de um gato" src="https://imgs.search.brave.com/lt-EaWO9j90sQKui9WTgLwshXMkIvlrMI-vdbIlw7nA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5lYXN5LXBlYXN5/LmFpLzIyM2Y4OWNm/LTRjM2ItNDNkMS1i/NGI3LWE0Njg4Y2Fi/ODM2ZS85YjMxYTlh/ZC0yMzkxLTRlMzgt/YTdlMi0zNzkzZmRi/NThhNGZfdGh1bWIu/d2VicA" />
 </div>
 
-<img width="100%" src="https://raw.githubusercontent.com/Eubastosdev/Eubastosdev/snake-output/snake.svg" alt="Animação da cobrinha comendo o gráfico de contribuições" />
+<img width="100%" src="assets/snake.svg" alt="Animação da cobrinha comendo o gráfico de contribuições" />
 
 ## Contato
 
