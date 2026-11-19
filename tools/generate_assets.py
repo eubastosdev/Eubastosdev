@@ -384,6 +384,56 @@ def profile_card(lang, mobile=False):
     write(name, svg_wrap(W, H, c["alt"], body, CARD_CSS))
 
 
+# --- Cartões de tecnologia -------------------------------------------------
+import re
+
+ICONS = Path(__file__).resolve().parent / "icons"
+
+# Ordem = a mesma do README original (não reordenar sem querer!).
+TOOLS = [
+    ("html5", "HTML5"), ("css3", "CSS"), ("javascript", "JavaScript"), ("react", "React"),
+    ("tailwindcss", "Tailwind CSS"), ("typescript", "TypeScript"), ("bootstrap", "Bootstrap"),
+    ("figma", "Figma"), ("python", "Python"), ("nodejs", "Node.js"), ("mysql", "MySQL"),
+    ("sqlite", "SQLite"), ("postgresql", "PostgreSQL"), ("mongodb", "MongoDB"), ("git", "Git"),
+    ("github", "GitHub"), ("amazonwebservices", "Amazon AWS"), ("googlecloud", "Google Cloud"),
+    ("npm", "npm"),
+]
+TILE = "#F8FAFC"
+AW_BOLD = {' ': 278, '.': 278, '5': 556, 'A': 722, 'B': 722, 'C': 722, 'D': 722, 'F': 611, 'G': 778, 'H': 722, 'J': 556, 'L': 611, 'M': 833, 'N': 722, 'P': 667, 'Q': 778, 'R': 722, 'S': 667, 'T': 611, 'W': 944, 'a': 556, 'b': 611, 'c': 556, 'd': 611, 'e': 556, 'g': 611, 'h': 611, 'i': 278, 'j': 278, 'l': 278, 'm': 889, 'n': 611, 'o': 611, 'p': 611, 'r': 389, 's': 556, 't': 333, 'u': 611, 'v': 556, 'w': 778, 'y': 556, 'z': 500}  # Liberation Sans Bold (métrica do Arial)
+TOOL_H = 56
+
+
+def _icon_inner(key):
+    """Conteúdo do SVG do ícone (sem a tag raiz), para embutir no cartão."""
+    raw = (ICONS / f"{key}.svg").read_text(encoding="utf-8")
+    m = re.search(r"<svg[^>]*>(.*)</svg>", raw, re.S)
+    assert m, key
+    inner = m.group(1)
+    assert "<script" not in inner and "href=\"http" not in inner, f"{key}: conteúdo suspeito"
+    return inner
+
+
+def text_width(name, size=15):
+    """Largura estimada (px) do rótulo em negrito. Margem de 6% p/ fontes mais largas (ex.: Inter)."""
+    return sum(AW_BOLD.get(c, 600) for c in name) / 1000 * size * 1.06
+
+
+def tool_card(key, name):
+    """Cartão no estilo: [ quadrado claro com logo ] Nome."""
+    tw = text_width(name)
+    w = round(60 + tw + 18)
+    body = (
+        f'<rect x=".75" y=".75" width="{w-1.5}" height="{TOOL_H-1.5}" rx="12" fill="{BG}" stroke="{BORDER}" stroke-width="1.5"/>'
+        f'<rect x="8" y="8" width="40" height="40" rx="9" fill="{TILE}"/>'
+        f'<svg x="13" y="13" width="30" height="30" viewBox="0 0 128 128">{_icon_inner(key)}</svg>'
+        f'<text x="60" y="33.5" font-family="{SANS}" font-size="15" font-weight="700" fill="{TEXT}">{escape(name)}</text>'
+    )
+    (OUT / "toolkit").mkdir(parents=True, exist_ok=True)
+    out = OUT / "toolkit" / f"{key}.svg"
+    out.write_text(svg_wrap(w, TOOL_H, name, body), encoding="utf-8")
+    print("ok toolkit/" + out.name)
+
+
 # --- Geração ---------------------------------------------------------------
 def main():
     # Banners (desktop 960x260 e mobile 480x260)
@@ -424,6 +474,10 @@ def main():
     for lang in COPY:
         profile_card(lang)
         profile_card(lang, mobile=True)
+
+    # Cartões de tecnologia
+    for key, name in TOOLS:
+        tool_card(key, name)
 
     # Rodapé
     footer("footer-pt.svg", "Aprendendo em público, um commit de cada vez.",
