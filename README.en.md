@@ -50,10 +50,9 @@
 
 ## Contact
 
-<!-- TODO(Luiz): replace the two links below with your real ones -->
 <p align="center">
-  <a href="https://www.linkedin.com/in/YOUR-USERNAME/"><img src="assets/contact-linkedin.svg" height="44" alt="LinkedIn" /></a>
-  <a href="mailto:your-email@example.com"><img src="assets/contact-email.svg" height="44" alt="Send an email" /></a>
+  <a href="https://www.linkedin.com/in/luiz-pereira-3803a4335"><img src="assets/contact-linkedin.svg" height="44" alt="LinkedIn" /></a>
+  <a href="mailto:eudev.agenda@gmail.com"><img src="assets/contact-email.svg" height="44" alt="Send an email" /></a>
   <a href="https://github.com/Eubastosdev"><img src="assets/contact-github.svg" height="44" alt="GitHub" /></a>
 </p>
 

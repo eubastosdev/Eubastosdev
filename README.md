@@ -50,10 +50,9 @@
 
 ## Contato
 
-<!-- TODO(Luiz): trocar os dois links abaixo pelos seus de verdade -->
 <p align="center">
-  <a href="https://www.linkedin.com/in/SEU-USUARIO/"><img src="assets/contact-linkedin.svg" height="44" alt="LinkedIn" /></a>
-  <a href="mailto:seu-email@exemplo.com"><img src="assets/contact-email.svg" height="44" alt="Enviar e-mail" /></a>
+  <a href="https://www.linkedin.com/in/luiz-pereira-3803a4335"><img src="assets/contact-linkedin.svg" height="44" alt="LinkedIn" /></a>
+  <a href="mailto:eudev.agenda@gmail.com"><img src="assets/contact-email.svg" height="44" alt="Enviar e-mail" /></a>
   <a href="https://github.com/Eubastosdev"><img src="assets/contact-github.svg" height="44" alt="GitHub" /></a>
 </p>
 
