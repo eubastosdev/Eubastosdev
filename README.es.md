@@ -1,4 +1,4 @@
-<p align="right"><a href="README.md"><img src="assets/lang-pt-off.svg" height="44" alt="Ler em português" /></a> <a href="README.en.md"><img src="assets/lang-en-off.svg" height="44" alt="Read in English" /></a> <a href="README.es.md"><img src="assets/lang-es-on.svg" height="44" alt="Español (idioma actual)" /></a></p>
+<p align="right"><a href="README.md"><picture><source media="(max-width: 600px)" srcset="assets/lang-pt-off-mobile.svg" /><img src="assets/lang-pt-off.svg" height="44" alt="Ler em português" /></picture></a> <a href="README.en.md"><picture><source media="(max-width: 600px)" srcset="assets/lang-en-off-mobile.svg" /><img src="assets/lang-en-off.svg" height="44" alt="Read in English" /></picture></a> <a href="README.es.md"><picture><source media="(max-width: 600px)" srcset="assets/lang-es-on-mobile.svg" /><img src="assets/lang-es-on.svg" height="44" alt="Español (idioma actual)" /></picture></a></p>
 
 <p align="center"><picture><source media="(max-width: 600px)" srcset="assets/card-es-mobile.svg" /><img src="assets/card-es.svg" width="960" alt="Tarjeta de perfil: ¡hola, soy Luiz! Desarrollador, futuro ingeniero y estudiante." /></picture></p>
 

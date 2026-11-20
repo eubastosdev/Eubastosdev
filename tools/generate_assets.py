@@ -297,8 +297,11 @@ def profile_card(lang, mobile=False):
     box_h = s(72, 76)
     y_chip = s(366, box_y + box_h + 20)
 
-    hi_size = s(46, 30)
-    hi_len = (len(c["hi"]) + len(c["name"]) + 1) * hi_size * 0.50
+    hi_full = c["hi"] + c["name"] + c["bang"]
+    hi_size = fit_size(hi_full, s(46, 30), col_w)
+    sub_size = fit_size(c["sub"], s(18, 13), col_w)
+    t1_size = fit_size(c["t1"], s(22, 17), col_w)
+    t2_size = fit_size(c["t2"], s(17, 14), col_w)
 
     body = f"""<defs>
   <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="{SURFACE}"/></pattern>
@@ -316,17 +319,10 @@ def profile_card(lang, mobile=False):
     body += f'<line x1="24" y1="{top_y}" x2="{W-24}" y2="{top_y}" stroke="{BORDER}" stroke-width="1.5"/>\n'
     body += (f'<text x="{L}" y="{y_eyebrow}" font-family="{MONO}" font-size="{s(13,11)}" letter-spacing="3" '
              f'fill="{ACCENT}" font-weight="700">{escape(c["eyebrow"])}</text>\n')
-    body += (f'<text class="rise" x="{L}" y="{y_hi}" font-family="{SANS}" font-size="{hi_size}" font-weight="800" fill="{TEXT}" '
-             f'textLength="{hi_len:.0f}" lengthAdjust="spacing">{escape(c["hi"])}<tspan fill="{ACCENT}">{c["name"]}</tspan>{c["bang"]}</text>\n')
-    sub_len = min(col_w, len(c["sub"]) * s(18, 13) * 0.5)
-    body += (f'<text x="{L}" y="{y_sub}" font-family="{SANS}" font-size="{s(18,13)}" fill="{MUTED}" '
-             f'textLength="{sub_len:.0f}" lengthAdjust="spacing">{escape(c["sub"])}</text>\n')
-    t1_len = min(col_w, len(c["t1"]) * s(22, 17) * 0.52)
-    body += (f'<text x="{L}" y="{y_t1}" font-family="{SANS}" font-size="{s(22,17)}" font-weight="600" fill="{TEXT}" '
-             f'textLength="{t1_len:.0f}" lengthAdjust="spacing">{escape(c["t1"])}</text>\n')
-    t2_len = min(col_w, len(c["t2"]) * s(17, 14) * 0.5)
-    body += (f'<text x="{L}" y="{y_t2}" font-family="{SANS}" font-size="{s(17,14)}" fill="{MUTED}" '
-             f'textLength="{t2_len:.0f}" lengthAdjust="spacing">{escape(c["t2"])}</text>\n')
+    body += (f'<text class="rise" x="{L}" y="{y_hi}" font-family="{SANS}" font-size="{hi_size}" font-weight="800" fill="{TEXT}">{escape(c["hi"])}<tspan fill="{ACCENT}">{c["name"]}</tspan>{c["bang"]}</text>\n')
+    body += (f'<text x="{L}" y="{y_sub}" font-family="{SANS}" font-size="{sub_size}" fill="{MUTED}">{escape(c["sub"])}</text>\n')
+    body += (f'<text x="{L}" y="{y_t1}" font-family="{SANS}" font-size="{t1_size}" font-weight="600" fill="{TEXT}">{escape(c["t1"])}</text>\n')
+    body += (f'<text x="{L}" y="{y_t2}" font-family="{SANS}" font-size="{t2_size}" fill="{MUTED}">{escape(c["t2"])}</text>\n')
     # caixa de terminal
     body += (f'<rect x="{L}" y="{box_y}" width="{col_w if mobile else 520}" height="{box_h}" rx="14" fill="{SURFACE}" fill-opacity=".6" '
              f'stroke="{BORDER}" stroke-width="1.3"/>\n')
@@ -386,6 +382,14 @@ def text_width(name, size=15):
     return sum(AW_BOLD.get(c, 600) for c in name) / 1000 * size * 1.06
 
 
+def fit_size(text, size, max_w):
+    """Maior tamanho (<= size) em que o texto cabe em max_w, pela métrica real da fonte.
+    Substitui o textLength: forçar a largura estica o espaçamento e quebra no WebKit/iOS."""
+    while text_width(text, size) > max_w and size > 9:
+        size -= 0.5
+    return size
+
+
 def tool_card(key, name):
     """Cartão no estilo: [ quadrado claro com logo ] Nome."""
     tw = text_width(name)
@@ -411,6 +415,9 @@ def main():
             suffix = "on" if active else "off"
             lang_button(f"lang-{code.lower()}-{suffix}.svg", code, name, active,
                         f"{name}{' (idioma atual)' if active else ''}")
+            # versão compacta (só o código) para telas estreitas: os 3 cabem na mesma linha
+            _button(f"lang-{code.lower()}-{suffix}-mobile.svg", code,
+                    f"{name}{' (idioma atual)' if active else ''}", _arrow_right, primary=active)
 
     # Navegação
     nav = {
